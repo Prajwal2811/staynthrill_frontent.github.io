@@ -1,0 +1,193 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { FiArrowLeft } from "react-icons/fi";
+import toast, { Toaster } from "react-hot-toast";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import PageMeta from "../../components/common/PageMeta";
+
+interface Adventure {
+  id: number;
+  adventureId: string;
+  vendorId: string;
+  title: string;
+  location: string;
+  category: string;
+  price: number;
+  status: "approved" | "rejected";
+}
+
+export default function ViewAdventure() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [adventure, setAdventure] = useState<Adventure | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [remark, setRemark] = useState("");
+
+  useEffect(() => {
+    setAdventure({
+      id: Number(id),
+      adventureId: `ADV${3000 + Number(id)}`,
+      vendorId: `VND${700 + Number(id)}`,
+      title: `Adventure ${id}`,
+      location: ["Manali", "Rishikesh", "Goa", "Ladakh"][Number(id) % 4],
+      category: ["Trekking", "Safari", "Water Sports"][Number(id) % 3],
+      price: 2500 + Number(id) * 150,
+      status: "approved", // default
+    });
+  }, [id]);
+
+  if (!adventure) return <div className="p-6">Loading...</div>;
+
+  const handleReject = () => {
+    setAdventure({ ...adventure, status: "rejected" });
+    setShowModal(false);
+    toast.success("Adventure Rejected Successfully");
+  };
+
+  const getStatusColor = () => {
+    switch (adventure.status) {
+      case "approved":
+        return "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300";
+      case "rejected":
+        return "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300";
+      default:
+        return "";
+    }
+  };
+
+  return (
+    <div>
+      <PageMeta title="Adventure Details" description="View Adventure Details" />
+      <PageBreadcrumb pageTitle="Adventure Details" />
+      <Toaster position="top-right" />
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
+
+        {/* Top Section */}
+        <div className="mb-6">
+
+          {/* First Row */}
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-semibold dark:text-white">
+                Adventure Details
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                View complete information and update approval status.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span
+                className={`px-3 py-1 text-xs rounded-full capitalize font-medium ${getStatusColor()}`}
+              >
+                {adventure.status}
+              </span>
+
+              {/* Show Reject button only if approved */}
+              {adventure.status === "approved" && (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+                >
+                  Reject Adventure
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Back Button */}
+          <div className="mt-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+            >
+              <FiArrowLeft />
+              Back
+            </button>
+          </div>
+        </div>
+
+        {/* Adventure Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div>
+            <p className="text-sm text-gray-500">Adventure ID</p>
+            <p className="font-medium">{adventure.adventureId}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Vendor ID</p>
+            <p className="font-medium">{adventure.vendorId}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Title</p>
+            <p className="font-medium">{adventure.title}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Location</p>
+            <p className="font-medium">{adventure.location}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Category</p>
+            <p className="font-medium">{adventure.category}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Price</p>
+            <p className="font-medium text-blue-600">
+              ₹{adventure.price}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Reject Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 w-96 shadow-xl">
+
+            <h3 className="text-lg font-semibold mb-4 dark:text-white">
+              Reject Adventure
+            </h3>
+
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+              Please provide a reason for rejection (optional).
+            </p>
+
+            <textarea
+              placeholder="Enter rejection reason"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+              className="w-full border rounded-lg p-2 mb-4 dark:bg-gray-800"
+            />
+
+            <div className="flex gap-3">
+
+              <button
+                onClick={handleReject}
+                className="flex-1 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+              >
+                Confirm Reject
+              </button>
+
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700"
+              >
+                Cancel
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
