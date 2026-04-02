@@ -253,21 +253,25 @@ const AppSidebar: React.FC = () => {
                   className={`menu-item group ${
                     openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
-                      ? "menu-item-active"
-                      : "menu-item-inactive"
-                  } cursor-pointer`}
+                      ? "bg-white text-black"
+                      : "text-white hover:bg-slate-700"
+                  }`}
                 >
-                  <span className="menu-item-icon-size">{nav.icon}</span>
+                  <span className="menu-item-icon-size text-inherit">
+                    {nav.icon}
+                  </span>
+
                   {(isExpanded || isHovered || isMobileOpen) && (
                     <span className="menu-item-text">{nav.name}</span>
                   )}
+
                   {(isExpanded || isHovered || isMobileOpen) && (
                     <ChevronDownIcon
-                      className={`ml-auto w-5 h-5 transition-transform duration-200 ${
+                      className={`ml-auto w-5 h-5 ${
                         openSubmenu?.type === menuType &&
                         openSubmenu?.index === index
-                          ? "rotate-180 text-brand-500"
-                          : ""
+                          ? "rotate-180 text-black"
+                          : "text-white"
                       }`}
                     />
                   )}
@@ -292,10 +296,10 @@ const AppSidebar: React.FC = () => {
                         <Link
                           to={subItem.path}
                           onClick={handleMenuClick}
-                          className={`menu-dropdown-item ${
+                          className={`block px-3 py-2 rounded-lg text-sm ${
                             isActive(subItem.path)
-                              ? "menu-dropdown-item-active"
-                              : "menu-dropdown-item-inactive"
+                              ? "bg-white text-black"
+                              : "text-gray-300 hover:bg-slate-700 hover:text-white"
                           }`}
                         >
                           {subItem.name}
@@ -312,13 +316,14 @@ const AppSidebar: React.FC = () => {
                   onClick={handleMenuClick}
                   className={`menu-item group ${
                     isActive(nav.path)
-                      ? "menu-item-active"
-                      : "menu-item-inactive"
+                      ? "bg-white text-black"
+                      : "text-white hover:bg-slate-700"
                   }`}
                 >
-                  <span className="menu-item-icon-size">
+                  <span className="menu-item-icon-size text-inherit">
                     {nav.icon}
                   </span>
+
                   {(isExpanded || isHovered || isMobileOpen) && (
                     <span className="menu-item-text">{nav.name}</span>
                   )}
@@ -333,7 +338,9 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed flex flex-col top-0 px-5 left-0 
+      bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white border-r border-slate-700
+      h-screen transition-all duration-300 z-50 
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -349,42 +356,40 @@ const AppSidebar: React.FC = () => {
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* LOGO */}
       <div className="py-8 flex justify-start">
         <Link
           to="/dashboard"
           onClick={handleMenuClick}
           className="flex items-center gap-2 ml-10"
         >
-          <span className="text-2xl font-bold tracking-wide text-gray-900 dark:text-white">
+          <span className="text-2xl font-bold text-white">
             Stay<span className="text-purple-500">N</span>Thrill
           </span>
         </Link>
       </div>
 
-      <div className="flex flex-col flex-1 overflow-y-auto duration-300 ease-linear no-scrollbar">
+      {/* MENU */}
+      <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>
-              <h2 className="mb-4 text-xs uppercase text-gray-400">
-                Menu
-              </h2>
+              <h2 className="mb-4 text-xs uppercase text-gray-400">Menu</h2>
               {renderMenuItems(navItems, "main")}
             </div>
 
             <div>
-              <h2 className="mb-4 text-xs uppercase text-gray-400">
-                Others
-              </h2>
+              <h2 className="mb-4 text-xs uppercase text-gray-400">Others</h2>
               {renderMenuItems(othersItems, "others")}
             </div>
           </div>
         </nav>
 
-        {/* SIGN OUT */}
+        {/* LOGOUT */}
         <div className="mt-auto pb-6">
           <button
             onClick={handleLogout}
-            className="menu-item group menu-item-inactive w-full cursor-pointer"
+            className="menu-item text-white hover:bg-slate-700 w-full"
           >
             <span className="menu-item-icon-size">
               <HorizontaLDots />

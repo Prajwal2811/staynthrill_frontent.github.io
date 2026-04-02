@@ -37,15 +37,18 @@ const AppHeader: React.FC = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 flex w-full bg-white border-gray-200 z-50 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
+    <header className="sticky top-0 flex w-full 
+    bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 
+    border-b border-slate-700 z-50">
+      
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
         
         {/* Left Section */}
-        <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
+        <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-slate-700 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
           
           {/* Sidebar Toggle */}
           <button
-            className="items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg dark:border-gray-800 lg:flex dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
+            className="items-center justify-center w-10 h-10 text-white border border-slate-700 rounded-lg hover:bg-slate-700 lg:flex lg:h-11 lg:w-11"
             onClick={handleToggle}
             aria-label="Toggle Sidebar"
           >
@@ -72,24 +75,10 @@ const AppHeader: React.FC = () => {
             )}
           </button>
 
-          {/* Logo (Mobile Only) */}
-          {/* <Link to="/" className="lg:hidden">
-            <img
-              className="dark:hidden"
-              src="/images/logo/logo.svg"
-              alt="Logo"
-            />
-            <img
-              className="hidden dark:block"
-              src="/images/logo/logo-dark.svg"
-              alt="Logo"
-            />
-          </Link> */}
-
           {/* Mobile Menu Toggle */}
           <button
             onClick={toggleApplicationMenu}
-            className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
+            className="flex items-center justify-center w-10 h-10 text-white rounded-lg hover:bg-slate-700 lg:hidden"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <circle cx="5" cy="12" r="2" fill="currentColor" />
@@ -97,16 +86,6 @@ const AppHeader: React.FC = () => {
               <circle cx="19" cy="12" r="2" fill="currentColor" />
             </svg>
           </button>
-
-          {/* Search (Desktop Only) */}
-          {/* <div className="hidden lg:block">
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Search..."
-              className="h-10 w-[300px] rounded-lg border border-gray-200 bg-transparent px-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white"
-            />
-          </div> */}
         </div>
 
         {/* Right Section */}

@@ -2,14 +2,29 @@ import { useEffect, useState } from "react";
 import PageMeta from "../../components/common/PageMeta";
 
 export default function Home() {
-  // Set Launch Date (Change this date)
-  const launchDate = new Date("2026-05-31T00:00:00").getTime();
+
+  const COUNTDOWN_DAYS = 100;
+
+  function getStartTime() {
+    const savedTime = localStorage.getItem("countdownStart");
+
+    if (savedTime) {
+      return parseInt(savedTime);
+    } else {
+      const now = new Date().getTime();
+      localStorage.setItem("countdownStart", now);
+      return now;
+    }
+  }
+
+  const startTime = getStartTime();
+  const endTime = startTime + COUNTDOWN_DAYS * 24 * 60 * 60 * 1000;
 
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
 
   function getTimeRemaining() {
     const now = new Date().getTime();
-    const distance = launchDate - now;
+    const distance = endTime - now;
 
     if (distance <= 0) {
       return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -41,7 +56,6 @@ export default function Home() {
       <div className="flex items-center justify-center min-h-[80vh] px-4">
         <div className="text-center max-w-3xl w-full">
 
-          {/* Logo / Title */}
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
             StayNThrill
           </h1>
@@ -55,36 +69,17 @@ export default function Home() {
             Stay tuned!
           </p>
 
-          {/* Countdown Timer */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
 
-            <div className="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-              <h3 className="text-3xl font-bold text-primary">
-                {timeLeft.days}
-              </h3>
-              <p className="text-gray-500 text-sm mt-2">Days</p>
-            </div>
+            {["days", "hours", "minutes", "seconds"].map((unit) => (
+              <div key={unit} className="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
+                <h3 className="text-3xl font-bold text-primary">
+                  {timeLeft[unit]}
+                </h3>
+                <p className="text-gray-500 text-sm mt-2 capitalize">{unit}</p>
+              </div>
+            ))}
 
-            <div className="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-              <h3 className="text-3xl font-bold text-primary">
-                {timeLeft.hours}
-              </h3>
-              <p className="text-gray-500 text-sm mt-2">Hours</p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-              <h3 className="text-3xl font-bold text-primary">
-                {timeLeft.minutes}
-              </h3>
-              <p className="text-gray-500 text-sm mt-2">Minutes</p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-              <h3 className="text-3xl font-bold text-primary">
-                {timeLeft.seconds}
-              </h3>
-              <p className="text-gray-500 text-sm mt-2">Seconds</p>
-            </div>
           </div>
         </div>
       </div>
